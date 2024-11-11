@@ -90,15 +90,24 @@ def main():
 
     num_jobs = st.number_input("Number of Jobs", min_value=1, step=1, value=5)
     processing_case = st.selectbox("Processing Time Case", ("Case 1", "Case 2", "Case 3"))
+    due_date_case = st.selectbox("Due Date Case", ("Case 1", "Case 2"))
     rule = st.selectbox("Sequencing Rule", ("FCFS", "SPT", "LPT", "Smallest Slack", "Smallest Criticality", "Random"))
 
     if st.button("Run Simulation"):
-        processing_range, due_date_factor_range = {
-            "Case 1": ((2, 10), (0.3, 0.9)),
-            "Case 2": ((2, 50), (0.5, 1.1)),
-            "Case 3": ((2, 100), (0.5, 1.1)),
+        # Set processing time range based on selected processing case
+        processing_range = {
+            "Case 1": (2, 10),
+            "Case 2": (2, 50),
+            "Case 3": (2, 100)
         }[processing_case]
 
+        # Set due date factor range based on selected due date case
+        due_date_factor_range = {
+            "Case 1": (0.3, 0.9),
+            "Case 2": (0.5, 1.1)
+        }[due_date_case]
+
+        # Generate jobs and evaluate the schedule
         jobs = generate_jobs(int(num_jobs), processing_range, due_date_factor_range)
         scheduling_rule = {
             "FCFS": fcfs,
